@@ -22,5 +22,13 @@ public:
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
 		
-	
+private:
+
+	// UPROPERTY has strict syntax requirements (has to be immediately above the variable that it's targeting, no whitespace)
+	UPROPERTY(VisibleAnywhere)
+	float OpenAngle = 90.0f;
+
+	// this allows the value to be modified from within the editor
+	UPROPERTY(EditAnywhere)
+	ATriggerVolume* PressurePlate;
 };
