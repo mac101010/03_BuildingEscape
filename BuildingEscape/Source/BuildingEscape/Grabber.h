@@ -24,5 +24,21 @@ public:
 private:
 
 	float Reach = 100.f;
+
 	bool bActorAlreadyDetected = false;
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	UInputComponent* InputComponent = nullptr;
+
+	void Grab();
+
+	void Release();
+
+	void FindPhysicsHandleComponent();
+
+	void SetupInputComponent();
+
+	const FHitResult GetFirstPhysicsBodyInReach();
 };
+

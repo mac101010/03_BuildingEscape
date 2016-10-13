@@ -22,7 +22,7 @@ void UPositionReport::BeginPlay()
 	FString ObjectName = GetOwner()->GetName();
 	FString ObjectPos = GetOwner()->GetTransform().GetLocation().ToString();
 	
-	/// %s needs to be TChar (remember that the * is a dereference operator; an FString is an array of TChar pointers)
+	/// %s needs to be TChar (in this context, an FString is an array of TChar pointers and * is an overloaded operator)
 	UE_LOG(LogTemp, Warning, TEXT("%s is at %s"), *ObjectName, *ObjectPos);
 }
 
