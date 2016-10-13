@@ -25,8 +25,6 @@ private:
 
 	float Reach = 100.f;
 
-	bool bActorAlreadyDetected = false;
-
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
 	UInputComponent* InputComponent = nullptr;
@@ -40,5 +38,11 @@ private:
 	void SetupInputComponent();
 
 	const FHitResult GetFirstPhysicsBodyInReach();
+
+	FVector GetReachLineStart();
+
+	FVector GetReachLineEnd();
+
+	void DisplayDebugLine();
 };
 

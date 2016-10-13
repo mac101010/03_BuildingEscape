@@ -6,12 +6,14 @@
 */DerivedDataCache
 */Intermediate
 */Saved
-BuildingEscape/Content/StarterContent/
 BuildingEscape/Content/StarterContent/Textures
 BuildingEscape/Content/StarterContent/HDRI
+BuildingEscape/Content/StarterContent/
 
 #################################
 # Visual Studio Generated Files #
 #################################
-*.db
+*.VC.db
 *.suo
+*.VC.opendb
+*.sln
