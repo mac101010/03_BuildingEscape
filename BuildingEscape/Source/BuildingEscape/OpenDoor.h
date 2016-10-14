@@ -35,13 +35,12 @@ private:
 
 	/// this allows the value to be modified from within the editor
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
-
-	UPROPERTY(EditAnywhere)
-	AActor* ActorThatOpens;
+	ATriggerVolume* PressurePlate = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	float DoorCloseDelay = 0.75f;
+
+	float GetTotalMassOfActorsOnPlate();
 
 	float LastDoorOpenTime;
 };

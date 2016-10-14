@@ -3,6 +3,8 @@
 #include "BuildingEscape.h"
 #include "OpenDoor.h"
 
+#define OUT
+
 
 /// Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
@@ -22,9 +24,11 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = GetOwner();
-	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 
-	UE_LOG( LogTemp, Warning, TEXT("%s is at %s"), *GetOwner()->GetName(), *GetOwner()->GetTransform().GetRotation().ToString() );	
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Pressure plate unassigned"));
+	}
 }
 
 void UOpenDoor::OpenDoor()
@@ -47,7 +51,7 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
 
-	if (PressurePlate->IsOverlappingActor(ActorThatOpens))
+	if (GetTotalMassOfActorsOnPlate() >= 25.f)	// TODO make var
 	{
 		OpenDoor();
 		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
@@ -57,5 +61,27 @@ void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorCompo
 	{
 		CloseDoor();
 	}
+}
+
+float UOpenDoor::GetTotalMassOfActorsOnPlate()
+{
+	TArray<AActor*> OverlappingActors;
+
+	if (!PressurePlate) { return -1; }
+
+	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+
+	float TotalMass = 0;
+	for (const auto& CurrentActor : OverlappingActors)
+	{
+		float CurrentActorMass = CurrentActor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		TotalMass += CurrentActorMass;
+
+		UE_LOG(LogTemp, Warning, TEXT("Actor: %s"), *CurrentActor->GetName());
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("TOTAL: %f"), TotalMass);
+
+	return TotalMass;
 }
 

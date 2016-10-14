@@ -31,7 +31,7 @@ void UGrabber::FindPhysicsHandleComponent()
 	/// look for attached physics handle component that belongs to the pawn which this Grabber component belongs to
 	PhysicsHandle = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
 
-	if (PhysicsHandle == nullptr)
+	if (!PhysicsHandle)
 	{
 		UE_LOG(LogTemp, Error, TEXT("NO PHYSICS HANDLE detected for %s!"), *GetOwner()->GetName());
 	}
@@ -80,6 +80,8 @@ void UGrabber::Release()
 {
 	UE_LOG(LogTemp, Warning, TEXT("RELEASED"), *GetOwner()->GetName());
 
+	if (!PhysicsHandle) { return; }
+
 	PhysicsHandle->ReleaseComponent();
 }
 
@@ -87,6 +89,8 @@ void UGrabber::Release()
 void UGrabber::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
 {
 	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+
+	if (!PhysicsHandle) { return; }
 
 	if (PhysicsHandle->GrabbedComponent)
 	{
