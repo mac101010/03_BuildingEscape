@@ -5,6 +5,9 @@
 #include "Components/ActorComponent.h"
 #include "OpenDoor.generated.h"
 
+/// dynamic delegate used to expose events to Blueprint  (for handling smooth door opening within Blueprint)
+/// FDoorEvent is our own name for the event class node on Blueprint (name should resemble functionality)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class BUILDINGESCAPE_API UOpenDoor : public UActorComponent
@@ -17,30 +20,26 @@ public:
 
 	/// Called when the game starts
 	virtual void BeginPlay() override;
-
-	void OpenDoor();
-	void CloseDoor();
 	
 	/// Called every frame
 	virtual void TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction ) override;
 
-		
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnOpen;
+
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnClose;
+
 private:
 
 	AActor* Owner = GetOwner();
-
-	/// UPROPERTY has strict syntax requirements (has to be immediately above the variable that it's targeting, no whitespace)
-	UPROPERTY(EditAnywhere)
-	float OpenAngle = 0.0f;
 
 	/// this allows the value to be modified from within the editor
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	float DoorCloseDelay = 0.75f;
+	float TriggerMass = 25.f;
 
 	float GetTotalMassOfActorsOnPlate();
-
-	float LastDoorOpenTime;
 };

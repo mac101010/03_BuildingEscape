@@ -5,7 +5,6 @@
 
 #define OUT
 
-
 /// Sets default values for this component's properties
 UOpenDoor::UOpenDoor()
 {
@@ -31,36 +30,15 @@ void UOpenDoor::BeginPlay()
 	}
 }
 
-void UOpenDoor::OpenDoor()
-{
-	/// FRotator is pitch, yaw, and roll
-	///FRotator NewRotation = Owner->GetActorRotation().Add(0, 120, 0);
-	Owner->SetActorRotation(FRotator(0.f, OpenAngle, 0.f));
-}
-
-void UOpenDoor::CloseDoor()
-{
-	/// FRotator is pitch, yaw, and roll
-	///FRotator NewRotation = Owner->GetActorRotation().Add(0, -120, 0);
-	Owner->SetActorRotation(FRotator(0.f, -90.f, 0.f));
-}
-
-
 /// Called every frame
-void UOpenDoor::TickComponent( float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction )
+void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::TickComponent( DeltaTime, TickType, ThisTickFunction );
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (GetTotalMassOfActorsOnPlate() >= 25.f)	// TODO make var
-	{
-		OpenDoor();
-		LastDoorOpenTime = GetWorld()->GetTimeSeconds();
-	}
-	
-	if (GetWorld()->GetTimeSeconds() - LastDoorOpenTime > DoorCloseDelay)
-	{
-		CloseDoor();
-	}
+	if (GetTotalMassOfActorsOnPlate() >= TriggerMass)
+		OnOpen.Broadcast();
+	else
+		OnClose.Broadcast();
 }
 
 float UOpenDoor::GetTotalMassOfActorsOnPlate()
